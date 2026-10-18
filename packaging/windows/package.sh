@@ -108,7 +108,7 @@ cp run.py LICENSE README.md packaging/windows/README-Windows.txt "$dest/"
 cp packaging/windows/BB-Report-Tool.bat "$dest/"
 # The keyboard and mouse layout the package starts with (bbhost's defaults, mouse look on);
 # the player's own input.ini is kept when dist/ is refreshed below and by the launcher's updates.
-cp packaging/windows/input.ini "$dest/input.ini"
+cp packaging/windows/input-default.ini "$dest/input.ini"
 if [[ -d fsr4_shaders ]]; then cp -r fsr4_shaders "$dest/"; fi
 # DLSS (NVIDIA RTX): the MSVC-built bridge and NVIDIA's runtime, next to bb-probe.exe
 # (packaging/windows/build_dlss.sh). Without them the DLSS option stays unavailable.
@@ -144,7 +144,9 @@ for package in protobuf abseil-cpp openssl miniupnpc zlib; do
     license=/clang64/share/licenses/$package/LICENSE
     # -L: some of these are symlinks into another package's folder; a missing one is noted.
     if [[ -e $license ]]; then
-        cp -L "$license" "$dest/licenses/$package-LICENSE.txt" || echo "$package: license not copied ($license)" >&2
+        cp -L "$license" "$dest/licenses/$package-LICENSE.txt" 2>/dev/null ||
+            cat "$license" > "$dest/licenses/$package-LICENSE.txt" 2>/dev/null ||
+            { rm -f "$dest/licenses/$package-LICENSE.txt"; echo "$package: license not copied ($license)" >&2; }
     fi
 done
 find "$dest" -name __pycache__ -prune -exec rm -r {} +
