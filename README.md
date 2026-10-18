@@ -79,6 +79,10 @@ it as **DLC folder** on **Game & effects**, or copy them to `user\addcont\<title
 layout shadPS4 and bbport use).
 
 In the game, **Insert** (or **L3+R3** on a controller) opens the settings menu.
+The package starts with mouse look on and a Dark Souls III-style keyboard and mouse layout
+(WASD, Left Alt walk, Space dodge, Q lock-on, left click attack, Shift + left click strong attack,
+right click firearm, E interact, R Blood Vial, F item, Escape menu; F7 turns the mouse off); the
+mouse is also a pointer in the game's menus. The Controls page changes all of it.
 Keyboard: WASD move, arrows camera, Space Cross, Left Shift Circle, E Square, V Triangle,
 1/3 L1/R1, R/F L2/R2, Z L3, Q/C R3 (lock-on), I/K/J/L d-pad, Enter Options, Tab / Backspace
 left / right touchpad half. Xbox controllers: Back + d-pad left / right clicks the left / right

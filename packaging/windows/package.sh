@@ -55,6 +55,9 @@ cp -r scripts patches "$dest/"
 # Legacy CPU (Intel 3rd generation and older): the translation plan scripts/cpu_compat.py applies.
 mkdir -p "$dest/tools" && cp tools/legacy-cpu-plan.json "$dest/tools/"
 cp run.py LICENSE README.md packaging/windows/README-Windows.txt "$dest/"
+# The keyboard and mouse layout the package starts with (bbhost's defaults, mouse look on);
+# the player's own input.ini is kept when dist/ is refreshed below and by the launcher's updates.
+cp packaging/windows/input.ini "$dest/input.ini"
 if [[ -d fsr4_shaders ]]; then cp -r fsr4_shaders "$dest/"; fi
 # DLSS (NVIDIA RTX): the MSVC-built bridge and NVIDIA's runtime, next to bb-probe.exe
 # (packaging/windows/build_dlss.sh). Without them the DLSS option stays unavailable.
