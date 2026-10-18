@@ -8,9 +8,11 @@
 #include "common/assert.h"
 #include "common/logging/log.h"
 #include "sdl_window.h"
+#include "bbport_menu_pointer.h"
 #include "bbport_mouse.h"
 #include "bbport_overlay.h"
 #include "bbport_prompts.h"
+#include "bbport_settings.h"
 #include "bloodborne_cam.h"
 
 namespace Frontend {
@@ -159,6 +161,9 @@ bool WindowSDL::PollEvents() {
         default:
             break;
         }
+        // The mouse as a pointer in the game's menus: its position, clicks and wheel while it is
+        // not captured, and the device in use (bbport_menu_pointer.h).
+        BbMenuPointer::OnEvent(event, text_active || BbOverlay::CapturesInput());
         // HOT-003: the toggle/reload hotkeys work regardless of the menu or text dialog (F8
         // must reload input.ini even with the menu open), so they are handled before anything
         // else gets a chance to consume the key event. Held-down repeats are ignored the same
@@ -261,6 +266,7 @@ bool WindowSDL::PollEvents() {
     // because the menu can also close from the render thread (bbport_overlay.cpp's "Close"
     // button sets menu_open there, not through an SDL event here).
     UpdateMouseCapture();
+    BbMenuPointer::Pump(window, mouse_captured_last, text_active, BbOverlay::CapturesInput());
     BbPrompts::Apply();
     UpdateMouseCamera();
     return is_open;
@@ -285,8 +291,11 @@ void WindowSDL::UpdateMouseCamera() {
 
 bool WindowSDL::WantsMouseCapture() const {
     // MOU-003: all of mouse mode on, window focused, menu closed, text dialog inactive.
-    // BbOverlay::CapturesInput() already covers both the menu and the text entry box.
-    return mouse_mode_on.load(std::memory_order_relaxed) && window_focused && !BbOverlay::CapturesInput();
+    // BbOverlay::CapturesInput() already covers both the menu and the text entry box. The
+    // game's own menus release the mouse too, so it is a pointer in them (bbport.ini
+    // mouse_menu; bbport_menu_pointer.h): the capture resumes when the menu closes.
+    return mouse_mode_on.load(std::memory_order_relaxed) && window_focused && !BbOverlay::CapturesInput() &&
+           !(BbSettings::Get().mouse_menu && BbMenuPointer::InMenu());
 }
 
 void WindowSDL::UpdateMouseCapture() {

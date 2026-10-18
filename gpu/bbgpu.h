@@ -24,6 +24,16 @@ void bbnet_set_image(unsigned char *image, uint64_t size);
 void bbnet_initialize(void);
 /* Creates window, Vulkan device, presenter and GPU command processor. */
 int bbgpu_init(const BbGpuConfig *config);
+/* The game's memory image after the patches and before it is protected: the GPU library's
+ * own hooks into the game's code go in here (the mouse pointer in the game's menus,
+ * bbport_menu_pointer.h). Each hook checks the bytes it replaces and refuses another version. */
+void bbgpu_set_image(unsigned char *image, uint64_t size);
+/* Pad thread, once per sample after input.ini's bindings: the pad as they left it (buttons and
+ * the left stick, for "a direction is held"), back the buttons the mouse pointer adds in the
+ * game's menus this sample: a click's Confirm (or an option's Left/Right), a right click's
+ * Back, the wheel's Up/Down. 0 outside the game's menus, while the mouse is captured for the
+ * camera, or with bbport.ini mouse_menu=0. */
+uint32_t bbgpu_menu_pointer_sample(uint32_t buttons, uint8_t left_x, uint8_t left_y);
 /* Function for an imported NID ("NID#lib#mod"), or 0 when the GPU library does not provide it. */
 uintptr_t bbgpu_resolve(const char *scoped_nid);
 /* Called first by the loader's SIGSEGV handler: 1 when a GPU page-tracking fault was handled. */

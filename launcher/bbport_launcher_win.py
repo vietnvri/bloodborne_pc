@@ -194,12 +194,12 @@ TWEAKS = [
     ('quit_to_desktop', ('Quit to Desktop in the title menu and in the System menu',
                          'Пункт «Выйти на рабочий стол» в главном меню и в меню «Система»'), True),
 ]
-INI_FLAGS = {'sharpen', 'object_motion', 'show_fps', 'mute_unfocused', 'frame_gen_fit_display',
+INI_FLAGS = {'sharpen', 'object_motion', 'show_fps', 'mute_unfocused', 'mouse_menu', 'frame_gen_fit_display',
              *(k for k, _t, _o in EFFECTS + EXTRAS + CHEATS + TWEAKS)}
 INI_DEFAULTS = {'upscaler': 'fsr4', 'preset': '1', 'sharpen': '1', 'sharpness': '0.50',
                 'object_motion': '1', 'show_fps': '1', 'output_res': '1920x1080', 'model_lod': '0',
                 'live_resolution': 'auto', 'hud_position': '100', 'fov': '43', 'mute_unfocused': '0',
-                'button_prompts': 'auto',
+                'button_prompts': 'auto', 'mouse_menu': '1',
                 'frame_gen': 'off', 'frame_gen_multiplier': '2', 'frame_gen_fit_display': '0',
                 **{key: '1' if on else '0' for key, _t, on in EFFECTS + EXTRAS + CHEATS + TWEAKS}}
 APP_DEFAULTS = {'ui_language': '', 'game_dir': str(PORT_DIR.parent / 'CUSA03173'), 'user_dir': '', 'dlc_dir': '',
@@ -1582,6 +1582,13 @@ class Launcher:
                        'F7/F8).'))
 
         self.section(f, _('Mouse look', 'Обзор мышью'))
+        self.check(f, 'mouse_menu', 'ini', _("Mouse pointer in the game's menus", 'Указатель мыши в меню игры'),
+                   _('Point at a row to select it, click to choose it (or an option\'s arrow), right-click '
+                     'for Back, scroll with the wheel. Mouse look lets go of the mouse while a menu is open '
+                     'and takes it back when it closes. Game version 1.09.',
+                     'Наведите на строку, чтобы выбрать её, щёлкните, чтобы подтвердить (или по стрелке '
+                     'параметра), правая кнопка — «Назад», колесо — прокрутка. Обзор мышью отпускает мышь, '
+                     'пока открыто меню, и забирает её обратно, когда оно закрыто. Версия игры 1.09.'))
         ms = self.mouse_settings
 
         def mark_mouse_edited(*_a):

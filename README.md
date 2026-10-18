@@ -45,7 +45,8 @@ https://nativeretro.com/
 - **Controller and keyboard**, an in-game settings menu (Insert or L3+R3), name entry on
   screen, a desktop shortcut, and a button to clear the shader cache.
 - **Keyboard and mouse:** remap keys and buttons on the Controls page (up to three per action), key combinations such as
-  Shift + left click, a Dark Souls III layout, mouse look, and a direct 1:1 mouse camera
+  Shift + left click, a Dark Souls III layout, mouse look, a direct 1:1 mouse camera, and the
+  mouse as a pointer in the game's own menus (hover, click, right-click for Back, the wheel)
   ([docs/INPUT.md](docs/INPUT.md)).
 - **Text and voice language** chosen separately, Brazilian Portuguese text included.
 - **Achievements page** in the launcher with the trophies you have earned, updated live.
@@ -138,7 +139,9 @@ Online play uses the network, NP and shadNet code of [shadPS4](https://github.co
 by **Awaken** ([BloodBorneButPc](https://github.com/Awakenchan/BloodBorneButPc)), whose online code
 bbport now uses, including the backend for [The Hunter's Dream](https://thehuntersdream.com)
 adapted from [bbhost](https://github.com/droogie/bbhost) by droogie (GPL-3.0-or-later; see
-[gpu/bbnet/SHADNET-PORT.md](gpu/bbnet/SHADNET-PORT.md)). Thanks to Metr1k and The Hunter's Dream
+[gpu/bbnet/SHADNET-PORT.md](gpu/bbnet/SHADNET-PORT.md)). The mouse pointer in the game's menus is
+bbhost's native menu pointer as well, through [DarkIzuku](https://github.com/DarkIzuku/bloodborne_pc)'s
+port of it to this family of ports (`gpu/shim/bbport_menu_pointer.cpp`, GPL-3.0-or-later). Thanks to Metr1k and The Hunter's Dream
 team for their guidance, and to Wozzardman's [shadp2p](https://github.com/Wozzardman/shadp2p),
 which bbport's first online version was built on.
 

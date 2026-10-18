@@ -670,6 +670,9 @@ static void sample_host(PadData *d) {
     if (button_output_held(&host,cfg,OUT_TOUCHPAD_LEFT)) touch_click(d,0);
     if (button_output_held(&host,cfg,OUT_TOUCHPAD_RIGHT)) touch_click(d,1);
     if (button_output_held(&host,cfg,OUT_TOUCHPAD_CENTER)) { d->buttons|=BTN_TOUCHPAD; d->touch_count=1; d->touches[0]=(PadTouch){.x=960,.y=471,.id=0}; }
+    /* The mouse as a pointer in the game's menus (bbport_menu_pointer.h): a click's Confirm or
+     * an option's Left/Right, a right click's Back, the wheel's Up/Down, this sample only. */
+    d->buttons|=bbgpu_menu_pointer_sample(d->buttons,d->left_x,d->left_y);
 }
 
 /* BB_PAD_FILE=<file>: scripted input for automated runs. The file holds whitespace-separated

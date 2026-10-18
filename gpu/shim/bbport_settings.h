@@ -88,6 +88,9 @@ struct Values {
     std::atomic<bool> mute_unfocused{false};
     /// Keyboard and mouse button prompts: with the device in use (auto), or always one kind.
     std::atomic<int> button_prompts{PromptsAuto};
+    /// The mouse as a pointer in the game's own menus (bbport_menu_pointer.h): hover, click,
+    /// right click for Back, the wheel; the camera lets go of it while a menu is open.
+    std::atomic<bool> mouse_menu{true};
     // FSR 4 checks (menu): the provider's auto exposure, the jitter sign it is given.
     std::atomic<bool> fsr4_auto_exposure{true};
     std::atomic<bool> fsr4_invert_jitter{false};

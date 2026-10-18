@@ -129,6 +129,33 @@ window thread writes the other set of pixels into guest memory when the device c
 (`gpu/shim/bbport_prompt_icons.cpp` draws and encodes them). `BB_PROMPT_TRACE=1` logs every
 small texture the game uploads and saves its bytes, to find button pictures in other textures.
 
+## Mouse pointer in the game's menus
+
+```ini
+# bbport.ini (not input.ini): on by default
+mouse_menu = 1
+```
+
+In the game's own menus — the title screen, the pause and System menus, the inventory and
+storage, the shop, option screens — the mouse is a pointer, the way Dark Souls III's PC version
+has it: pointing at a row moves the game's cursor there (with the cursor sound), a left click
+chooses the row, or steps an option's value by the arrow (or the side of the value) it landed on,
+a right click is Back, and the wheel is Up and Down. Mouse look lets go of the mouse the moment a
+menu opens and takes it back when the menu closes, so there is nothing to toggle; keys and the
+controller keep working in menus as before, and while the controller was the last thing used the
+system cursor is hidden until the mouse moves again. Pointing never fights a held direction: with
+the d-pad or the left stick pushed, the pointer stays still.
+
+This is bbhost's native menu pointer (by DarkIzuku's port of it to this family of ports; GPL-3.0-
+or-later), which hooks the game's list component at fixed 1.09 offsets and hit-tests the rows'
+own Scaleform clips. With another game version the hook refuses at start (`Pointer: refused` in
+`last_run.log`) and nothing else changes. Settings menu: **Mouse pointer in the game's menus**;
+launcher: Controls → Mouse look. `BB_POINTER_LOG=1` logs every list the pointer sees and what it
+did; `BB_POINTER=0` keeps the hook in but never moves a cursor (to compare with the game's own
+behaviour). Screens that are not built from the game's list component take the pad only. On
+ultrawide outputs the menus' 1920x1080 stage is taken as centred in the widened HUD canvas; that
+is not yet checked on a real 21:9 or 32:9 screen.
+
 ## Mouse look
 
 ```ini

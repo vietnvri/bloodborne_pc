@@ -30,6 +30,7 @@
 #include "core/signals.h"
 #include "sdl_window.h"
 #include "bloodborne_cam.h"
+#include "bbport_menu_pointer.h"
 #include "video_core/renderer_vulkan/vk_rasterizer.h"
 
 extern "C" {
@@ -286,6 +287,11 @@ extern "C" uintptr_t bbgpu_resolve(const char* scoped_nid) {
 
 extern "C" int bbgpu_handle_fault(void* ucontext, void* address) {
     return Core::Signals::Instance()->DispatchAccessViolation(ucontext, address) ? 1 : 0;
+}
+
+extern "C" void bbgpu_set_image(unsigned char* image, uint64_t size) {
+    // The mouse as a pointer in the game's menus: hooks checked against the 1.09 code.
+    BbMenuPointer::Install(image, size);
 }
 
 extern "C" unsigned bbgpu_symbol_count(void) {

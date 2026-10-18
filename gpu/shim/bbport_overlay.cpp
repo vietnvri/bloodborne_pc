@@ -448,6 +448,8 @@ void Menu() {
     ImGui::SeparatorText("Other");
     Checkbox("Show FPS counter", s.show_fps);
     Checkbox("Mute when the game is in the background", s.mute_unfocused);
+    Checkbox("Mouse pointer in the game's menus", s.mouse_menu);
+    Hint("Point at a row to select it, click to choose it (or an option's arrow), right-click for Back, scroll with the wheel. The mouse camera lets go of the mouse while a menu is open.");
     static const char* prompt_modes[] = {"Follow the device in use", "PlayStation", "Keyboard and mouse", "Xbox",
                                          "Nintendo Switch"};
     int prompts = s.button_prompts;

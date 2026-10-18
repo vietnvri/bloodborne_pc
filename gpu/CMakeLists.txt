@@ -337,6 +337,12 @@ add_executable(upscaler-support-test EXCLUDE_FROM_ALL ../tests/test_upscaler_sup
 target_include_directories(upscaler-support-test PRIVATE shim)
 target_compile_options(upscaler-support-test PRIVATE -UNDEBUG)
 
+# bbport: the mouse pointer's placement on the game's menu stage (bbport_menu_pointer.h):
+# ninja -C out/gpu menu-pointer-test, then run it.
+add_executable(menu-pointer-test EXCLUDE_FROM_ALL ../tests/test_menu_pointer.cpp)
+target_include_directories(menu-pointer-test PRIVATE shim)
+target_compile_options(menu-pointer-test PRIVATE -UNDEBUG)
+
 add_executable(fsr4-bench EXCLUDE_FROM_ALL tools/fsr4_bench.cpp
     shadps4/video_core/renderer_vulkan/fsr411/fsr411.cpp)
 target_include_directories(fsr4-bench PRIVATE shadps4/video_core/renderer_vulkan/fsr411)
