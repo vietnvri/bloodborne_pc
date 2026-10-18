@@ -89,24 +89,30 @@ jobs:
         continue-on-error: true
         run: bash tools/fetch_fsr4_assets.sh
 
-      # packaging/windows/build_dlss.sh, step by step in PowerShell: from the MSYS2 shell CMake
-      # cannot see Visual Studio (bash cannot export ProgramFiles(x86)).
+      # packaging/windows/build_dlss.sh, step by step: the MSVC of whatever Visual Studio the
+      # runner image has (2026 today; the VS 2022 generator is not there), through Ninja.
+      - name: MSVC environment
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
       - name: DLSS bridge (NVIDIA SDK, MSVC)
         shell: pwsh
         continue-on-error: true
         run: |
           $ErrorActionPreference = 'Stop'
           git clone --depth 1 --filter=blob:none --sparse https://github.com/NVIDIA/DLSS out/dlss-sdk
-          git -C out/dlss-sdk sparse-checkout set include lib/Windows_x86_64/rel
+          git -C out/dlss-sdk sparse-checkout set include lib/Windows_x86_64/rel lib/Windows_x86_64/x64
           $root = (Get-Location).Path
           $msys = "${{ steps.msys2.outputs.msys2-location }}"
           New-Item -ItemType Directory -Force "$root/out/vkinclude" | Out-Null
           Copy-Item -Recurse -Force "$msys/clang64/include/vulkan" "$root/out/vkinclude/"
           Copy-Item -Recurse -Force "$msys/clang64/include/vk_video" "$root/out/vkinclude/"
-          cmake -S gpu/dlss_bridge -B out/dlss-bridge -G "Visual Studio 17 2022" -A x64 `
+          cmake -S gpu/dlss_bridge -B out/dlss-bridge -G Ninja -DCMAKE_BUILD_TYPE=Release `
+            -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl `
             -DDLSS_SDK_ROOT="$root/out/dlss-sdk" -DVULKAN_INCLUDE="$root/out/vkinclude"
           cmake --build out/dlss-bridge --config Release
-          Copy-Item out/dlss-bridge/Release/bbport_dlss.dll out/
+          Copy-Item out/dlss-bridge/bbport_dlss.dll out/
           Copy-Item out/dlss-sdk/lib/Windows_x86_64/rel/nvngx_dlss.dll out/
           Copy-Item out/dlss-sdk/lib/Windows_x86_64/rel/nvngx_dlssg.dll out/
           Copy-Item out/dlss-sdk/LICENSE.txt out/NVIDIA-DLSS-LICENSE.txt
