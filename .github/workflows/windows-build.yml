@@ -89,15 +89,28 @@ jobs:
         continue-on-error: true
         run: bash tools/fetch_fsr4_assets.sh
 
+      # packaging/windows/build_dlss.sh, step by step in PowerShell: from the MSYS2 shell CMake
+      # cannot see Visual Studio (bash cannot export ProgramFiles(x86)).
       - name: DLSS bridge (NVIDIA SDK, MSVC)
-        shell: msys2 {0}
+        shell: pwsh
         continue-on-error: true
         run: |
+          $ErrorActionPreference = 'Stop'
           git clone --depth 1 --filter=blob:none --sparse https://github.com/NVIDIA/DLSS out/dlss-sdk
           git -C out/dlss-sdk sparse-checkout set include lib/Windows_x86_64/rel
-          ls out/dlss-sdk/lib/Windows_x86_64/rel
-          export CMAKE_EXE="$(cygpath -u "$PROGRAMFILES/CMake/bin/cmake.exe")"
-          DLSS_SDK_ROOT="$PWD/out/dlss-sdk" bash packaging/windows/build_dlss.sh
+          $root = (Get-Location).Path
+          $msys = "${{ steps.msys2.outputs.msys2-location }}"
+          New-Item -ItemType Directory -Force "$root/out/vkinclude" | Out-Null
+          Copy-Item -Recurse -Force "$msys/clang64/include/vulkan" "$root/out/vkinclude/"
+          Copy-Item -Recurse -Force "$msys/clang64/include/vk_video" "$root/out/vkinclude/"
+          cmake -S gpu/dlss_bridge -B out/dlss-bridge -G "Visual Studio 17 2022" -A x64 `
+            -DDLSS_SDK_ROOT="$root/out/dlss-sdk" -DVULKAN_INCLUDE="$root/out/vkinclude"
+          cmake --build out/dlss-bridge --config Release
+          Copy-Item out/dlss-bridge/Release/bbport_dlss.dll out/
+          Copy-Item out/dlss-sdk/lib/Windows_x86_64/rel/nvngx_dlss.dll out/
+          Copy-Item out/dlss-sdk/lib/Windows_x86_64/rel/nvngx_dlssg.dll out/
+          Copy-Item out/dlss-sdk/LICENSE.txt out/NVIDIA-DLSS-LICENSE.txt
+          Get-ChildItem out/bbport_dlss.dll, out/nvngx_dlss.dll, out/nvngx_dlssg.dll
 
       - name: Windows Python for the frozen launcher
         id: python

@@ -275,7 +275,7 @@ mouse look or reloads the file (`f7`/`f8` by default, or whatever `hotkey_toggle
 
 ## Default file
 
-The Windows package ships an `input.ini` (`packaging/windows/input.ini`) with the keyboard and
+The Windows package ships an `input.ini` (`packaging/windows/input-default.ini`) with the keyboard and
 mouse layout bbhost and DarkIzuku's port start with — Dark Souls III's shape: WASD and Left Alt
 to walk, Space to dodge, Q to lock on, left click to attack and Shift + left click for the strong
 attack, right click for the firearm, E/R/F, Escape for the menu, G and T for gestures and
