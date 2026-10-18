@@ -75,7 +75,10 @@ cp packaging/windows/licenses/*.txt "$dest/licenses/"
 cp gpu/bbnet/SHADNET-PORT.md "$dest/licenses/online-code-NOTICE.md"
 for package in protobuf abseil-cpp openssl miniupnpc zlib; do
     license=/clang64/share/licenses/$package/LICENSE
-    if [[ -f $license ]]; then cp "$license" "$dest/licenses/$package-LICENSE.txt"; fi
+    # -L: some of these are symlinks into another package's folder; a missing one is noted.
+    if [[ -e $license ]]; then
+        cp -L "$license" "$dest/licenses/$package-LICENSE.txt" || echo "$package: license not copied ($license)" >&2
+    fi
 done
 find "$dest" -name __pycache__ -prune -exec rm -r {} +
 mkdir -p dist
