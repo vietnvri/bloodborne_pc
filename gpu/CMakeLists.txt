@@ -481,6 +481,12 @@ if (WIN32)
     target_link_libraries(shared-graphics-overlay-test PRIVATE bbgpu atrac9 onecore bcrypt ws2_32 -pthread)
 endif()
 
+# bbport: the mouse pointer's placement on the game's menu stage (bbport_menu_pointer.h):
+# ninja -C out/gpu menu-pointer-test, then run it.
+add_executable(menu-pointer-test EXCLUDE_FROM_ALL ../tests/test_menu_pointer.cpp)
+target_include_directories(menu-pointer-test PRIVATE shim)
+target_compile_options(menu-pointer-test PRIVATE -UNDEBUG)
+
 add_executable(fsr4-bench EXCLUDE_FROM_ALL tools/fsr4_bench.cpp
     shadps4/video_core/renderer_vulkan/fsr411/fsr411.cpp)
 target_include_directories(fsr4-bench PRIVATE shadps4/video_core/renderer_vulkan/fsr411)

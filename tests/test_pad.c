@@ -5,6 +5,7 @@
 
 static int capture;
 int bbgpu_overlay_captures_input(void) { return capture; }
+uint32_t bbgpu_menu_pointer_sample(uint32_t buttons, uint8_t left_x, uint8_t left_y) { (void)buttons; (void)left_x; (void)left_y; return 0; }
 uintptr_t runtime_lookup(const RuntimeExport *table, size_t count, const char *name) {
     (void)table; (void)count; (void)name;
     return 0;

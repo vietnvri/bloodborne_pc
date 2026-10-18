@@ -373,7 +373,7 @@ READOUTS = [('show_fps', ('FPS',)), ('show_frame_times', ('Frame time',)), ('sho
 COUNTER_COLORS = [('1', ('Colour-coded (green, orange, red)',)), ('0', ('Plain (grey)',))]
 # Effects that are taste, not performance: on Picture & performance (the others on All graphics).
 TASTE_EFFECTS = ('effect_chromatic_aberration', 'effect_dof', 'effect_motion_blur')
-INI_FLAGS = {'sharpen', 'object_motion', 'object_motion_cache', 'fsr_compatibility_options', 'show_fps', 'mute_unfocused', 'frame_gen_fit_display',
+INI_FLAGS = {'sharpen', 'object_motion', 'object_motion_cache', 'fsr_compatibility_options', 'show_fps', 'mute_unfocused', 'mouse_menu', 'frame_gen_fit_display',
              'sharp_ui', *(key for key, _t in READOUTS),
              *(k for k, _t, _o in EFFECTS + EXTRAS + CHEATS + TWEAKS)}
 INI_DEFAULTS = {'upscaler': 'fsr3', 'preset': '1', 'sharpen': '1', 'sharpness': '0.50',
@@ -381,7 +381,7 @@ INI_DEFAULTS = {'upscaler': 'fsr3', 'preset': '1', 'sharpen': '1', 'sharpness': 
                 'output_res': '1920x1080', 'model_lod': '0',
                 'fsr411_backend': 'vk', 'fsr41_version': 'fsr412', 'object_motion_cache': '0', 'fsr_compatibility_options': '0',
                 'live_resolution': 'auto', 'hud_position': '100', 'sharp_ui': '0', 'fov': '43', 'mute_unfocused': '0',
-                'button_prompts': 'auto',
+                'button_prompts': 'auto', 'mouse_menu': '1',
                 'frame_gen': 'off', 'frame_gen_multiplier': '2', 'frame_gen_fit_display': '0',
                 **{key: '1' if on else '0' for key, _t, on in EFFECTS + EXTRAS + CHEATS + TWEAKS}}
 APP_DEFAULTS = {'ui_language': '', 'game_dir': str(PORT_DIR.parent / 'CUSA03173'), 'user_dir': '', 'cache_dir': '',
@@ -4025,6 +4025,13 @@ class Launcher(bbport_setup.SetupMixin, bbport_help.HelpMixin, bbport_search.Sea
         """Mouse look: on or off, what the mouse moves, the camera mode and its sliders."""
         ttk, tk = self.ttk, self.tk
         self.section(f, _('Mouse look', 'Обзор мышью'))
+        self.check(f, 'mouse_menu', 'ini', _("Mouse pointer in the game's menus", 'Указатель мыши в меню игры'),
+                   _('Point at a row to select it, click to choose it (or an option\'s arrow), right-click '
+                     'for Back, scroll with the wheel. Mouse look lets go of the mouse while a menu is open '
+                     'and takes it back when it closes. Game version 1.09.',
+                     'Наведите на строку, чтобы выбрать её, щёлкните, чтобы подтвердить (или по стрелке '
+                     'параметра), правая кнопка — «Назад», колесо — прокрутка. Обзор мышью отпускает мышь, '
+                     'пока открыто меню, и забирает её обратно, когда оно закрыто. Версия игры 1.09.'))
         ms = self.mouse_settings
 
         def mark_mouse_edited(*_a):
