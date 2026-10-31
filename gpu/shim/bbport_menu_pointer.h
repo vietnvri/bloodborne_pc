@@ -41,8 +41,8 @@ void Pump(SDL_Window* window, bool captured, bool text_active, bool overlay_open
 /// The pointer in the Scaleform stage's pixels (1920x1080). The frame of `ow` x `oh` output
 /// pixels is fitted into the window (letterboxed, centred); the game's UI canvas of `cw` x `ch`
 /// covers that frame (1920x1080, or wider on ultrawide outputs where only the HUD canvas is
-/// widened); the menus' stage sits centred in the canvas. Window units are whatever the mouse
-/// position is in. False for an empty window or frame.
+/// widened); the menus' stage sits centred in the canvas, scaled up to it with Sharp UI. Window
+/// units are whatever the mouse position is in. False for an empty window or frame.
 inline bool StagePosition(int ww, int wh, int ow, int oh, int cw, int ch, float mx, float my,
                           float& sx, float& sy) {
     if (ww <= 0 || wh <= 0 || ow <= 0 || oh <= 0 || cw <= 0 || ch <= 0) {
@@ -53,8 +53,12 @@ inline bool StagePosition(int ww, int wh, int ow, int oh, int cw, int ch, float 
     const float fy = (float(wh) - float(oh) * present) * 0.5f;
     const float cx = (mx - fx) / (float(ow) * present) * float(cw);
     const float cy = (my - fy) / (float(oh) * present) * float(ch);
-    sx = cx - float(cw - 1920) * 0.5f;
-    sy = cy - float(ch - 1080) * 0.5f;
+    // Sharp UI (bbport.ini sharp_ui; ui_composition.h StageScale): the canvas is the output's
+    // size and Scaleform draws the stage scaled up to it, by the smaller ratio, centred. Without
+    // it the canvas is 1080 lines and the scale 1: the stage centred in a wider HUD canvas.
+    const float scale = std::max(1.0f, std::min(float(cw) / 1920.0f, float(ch) / 1080.0f));
+    sx = (cx - (float(cw) - 1920.0f * scale) * 0.5f) / scale;
+    sy = (cy - (float(ch) - 1080.0f * scale) * 0.5f) / scale;
     return true;
 }
 

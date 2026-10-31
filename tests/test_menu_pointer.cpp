@@ -35,9 +35,17 @@ int main() {
     // canvas' left edge is 330 stage pixels left of the stage and its centre is the stage's.
     assert(StagePosition(3440, 1440, 3440, 1440, 2580, 1080, 1720, 720, x, y) && near(x, 960) && near(y, 540));
     assert(StagePosition(3440, 1440, 3440, 1440, 2580, 1080, 0, 0, x, y) && near(x, -330) && near(y, 0));
+    // Sharp UI: the canvas is the 1440p output and the stage is drawn scaled up 1.5x to fill it.
+    assert(StagePosition(2560, 1440, 2560, 1440, 2560, 1440, 2560, 1440, x, y) && near(x, 1920) && near(y, 1080));
+    assert(StagePosition(2560, 1440, 2560, 1440, 2560, 1440, 1280, 720, x, y) && near(x, 960) && near(y, 540));
+    // Sharp UI on an ultrawide 3440x1440 output: the stage scaled 4/3 is 2560 wide, centred, so
+    // 440 output pixels of bars either side of it.
+    assert(StagePosition(3440, 1440, 3440, 1440, 3440, 1440, 1720, 720, x, y) && near(x, 960) && near(y, 540));
+    assert(StagePosition(3440, 1440, 3440, 1440, 3440, 1440, 440, 0, x, y) && near(x, 0) && near(y, 0));
+    assert(StagePosition(3440, 1440, 3440, 1440, 3440, 1440, 3000, 1440, x, y) && near(x, 1920) && near(y, 1080));
     // Nothing to place.
     assert(!StagePosition(0, 0, 1920, 1080, 1920, 1080, 1, 1, x, y));
     assert(!StagePosition(1920, 1080, 0, 0, 1920, 1080, 1, 1, x, y));
-    std::puts("menu pointer: PASS (stage position: fit, letterbox, pillarbox, scaled window, ultrawide canvas)");
+    std::puts("menu pointer: PASS (stage position: fit, letterbox, pillarbox, scaled window, ultrawide canvas, Sharp UI)");
     return 0;
 }

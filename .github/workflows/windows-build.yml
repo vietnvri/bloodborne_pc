@@ -9,6 +9,7 @@ on:
   push:
     branches:
       - port-darkizuku-mouse
+      - port-darkizuku-mouse-1.9.7
 
 jobs:
   build:
@@ -80,6 +81,7 @@ jobs:
         continue-on-error: true
         run: |
           cd tests
+          export PYTHONPATH=../launcher
           python test_input_defaults.py
           python test_fov.py
           python test_run_settings.py
@@ -118,11 +120,11 @@ jobs:
           Copy-Item out/dlss-sdk/LICENSE.txt out/NVIDIA-DLSS-LICENSE.txt
           Get-ChildItem out/bbport_dlss.dll, out/nvngx_dlss.dll, out/nvngx_dlssg.dll
 
-      - name: Windows Python for the frozen launcher
+      - name: Windows Python for the frozen launcher (package.sh PYTHON_VERSION)
         id: python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.14"
 
       - name: Package (packaging/windows/package.sh)
         shell: msys2 {0}
